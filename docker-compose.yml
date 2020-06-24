@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: linuxserver/mariadb:latest
+    container_name: mariadb_wallabag
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=321.qwerty
+      - MYSQL_DATABASE=wallabagdb
+      - MYSQL_USER=wallabaguser
+      - MYSQL_PASSWORD=wallabagpass
+    ports:
+      - 3306:3306
+
+  web:
+    image: fabiodcorreia/wallabag:latest
+    container_name: wallabag
+    environment:
+      - TZ=Europe/Lisbon
+      - PUID=1000
+      - PGID=1000
+      - DATABASE_HOST=mariadb_wallabag
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=wallabagdb
+      - DATABASE_USER=wallabaguser
+      - DATABASE_PASS=wallabagpass
+      - DOMAIN_NAME=http://localhost
+      - REGISTRATION_CONFIRM=false
+    volumes:
+      - wallabag_config:/config
+    ports:
+      - 80:80
+    depends_on:
+      - db
+
+volumes:
+  wallabag_config: {}
+  db_data: {}

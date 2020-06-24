@@ -64,9 +64,9 @@ if [ ! -f "$LOCK" ]; then
   check_env "DATABASE_USER" "$DATABASE_USER" "database_user" 1 1
   check_env "DATABASE_PASS" "$DATABASE_PASS" "database_password" 1 1
   check_env "DOMAIN_NAME" "$DOMAIN_NAME" "domain_name" 1 1
-  check_env "EMAIL_HOST" "$EMAIL_HOST" "mailer_host" 1 1
-  check_env "EMAIL_USER" "$EMAIL_USER" "mailer_user" 1 1
-  check_env "EMAIL_PASS" "$EMAIL_PASS" "mailer_password" 1 1
+  check_env "EMAIL_HOST" "$EMAIL_HOST" "mailer_host" 0 1
+  check_env "EMAIL_USER" "$EMAIL_USER" "mailer_user" 0 1
+  check_env "EMAIL_PASS" "$EMAIL_PASS" "mailer_password" 0 1
   check_env "EMAIL_FROM" "$EMAIL_FROM" "from_email" 0 1
   check_env "LOCALE" "$LOCALE" "locale" 0 1
   check_env "TWOFA_ENABLE" "$TWOFA_ENABLE" "twofactor_auth" 0 0
