@@ -28,7 +28,7 @@ print("TEST_ULR=" + APP_TEST_URL)
 br = mechanize.Browser()
 br.set_handle_robots(False)
 response = None
-for _ in range(1):
+for _ in range(10):
   try:
     response = br.open(APP_TEST_URL)
     assert response.code == 200, "response code is not 200"
