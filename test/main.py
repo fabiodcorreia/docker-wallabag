@@ -3,6 +3,8 @@
 import sys
 import os
 import mechanize
+import time
+
 
 def tryFollowLink(browser, link):
   try:
@@ -25,10 +27,17 @@ print("TEST_ULR=" + APP_TEST_URL)
 
 br = mechanize.Browser()
 br.set_handle_robots(False)
+response = None
+for _ in range(1):
+  try:
+    response = br.open(APP_TEST_URL)
+    assert response.code == 200, "response code is not 200"
+    assert br.title() == u'Welcome to wallabag! – wallabag', "title doesn't match"
+  except:
+    print("wating for 60 seconds before retrying again")
+    time.sleep(60)
 
-response = br.open(APP_TEST_URL)
-assert response.code == 200, "response code is not 200"
-assert br.title() == u'Welcome to wallabag! – wallabag', "title doesn't match"
+assert response != None, "fail to connect to the server"
 
 tryFollowLink(br, br.find_link(text="Register"))
 

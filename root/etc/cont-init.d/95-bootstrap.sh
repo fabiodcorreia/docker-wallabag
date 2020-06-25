@@ -28,6 +28,9 @@ function check_env {
 if [ ! -f "$LOCK" ]; then
   echo "**** start first run operations ****"
 
+  echo "***** start chown to $WALLABAG_PATH in background *****"
+  chown -R abc:abc $WALLABAG_PATH & # This will reduce the amount of time at the end
+
   mkdir -p /config/www/images
 
   echo "***** delete base /config/www/index.php *****"
@@ -35,11 +38,11 @@ if [ ! -f "$LOCK" ]; then
 
   echo "***** move and link parameters.yml to /config/www *****"
   mv "$APP_DIR/config/parameters.yml" $CONF_PARAMETERS
-  ln -s $CONF_PARAMETERS "$APP_DIR/config/parameters.yml"
+  ln -sf $CONF_PARAMETERS "$APP_DIR/config/parameters.yml"
 
   echo "***** move and link config_prod.yml to /config/www *****"
   mv "$APP_DIR/config/config_prod.yml" $CONF_CONFIG_PROD
-  ln -s $CONF_CONFIG_PROD "$APP_DIR/config/config_prod.yml"
+  ln -sf $CONF_CONFIG_PROD "$APP_DIR/config/config_prod.yml"
 
   echo "***** set app/config/config_prod.yml log to console *****"
   sed -i "s#path:.*#path: \"php://stderr\"#" $CONF_CONFIG_PROD
@@ -96,12 +99,10 @@ else
   echo "**** skip first run operations ****"
 
   echo "**** link parameters.yml to /config/www ****"
-  rm -fr "$APP_DIR/config/parameters.yml"
-  ln -s $CONF_PARAMETERS "$APP_DIR/config/parameters.yml"
+  ln -sf $CONF_PARAMETERS "$APP_DIR/config/parameters.yml"
 
   echo "**** link config_prod.yml to /config/www ****"
-  rm -fr "$APP_DIR/config/config_prod.yml"
-  ln -s $CONF_CONFIG_PROD "$APP_DIR/config/config_prod.yml"
+  ln -sf $CONF_CONFIG_PROD "$APP_DIR/config/config_prod.yml"
 
   echo "**** clear cache ****"
   $BIN_DIR/console cache:clear --env=prod || exit 1

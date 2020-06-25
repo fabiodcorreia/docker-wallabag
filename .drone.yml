@@ -36,6 +36,17 @@ trigger:
   status:
   - success
 
+services:
+  - name: mariadb_wallabag
+    image: fabiodcorreia/mariadb:latest
+    container_name: mariadb_wallabag
+    ports: [ 3306 ]
+    environment:
+      MYSQL_ROOT_PASSWORD: "321.qwerty"
+      MYSQL_DATABASE: "wallabagdb"
+      MYSQL_USER: "wallabaguser"
+      MYSQL_PASSWORD: "wallabagpass"
+
 steps:
   - name: wallabag_test
     image: fabiodcorreia/wallabag:test
@@ -45,7 +56,13 @@ steps:
     environment:
       PUID: "1000"
       PGID: "1000"
-
+      DATABASE_HOST: "mariadb_wallabag"
+      DATABASE_PORT: "3306"
+      DATABASE_NAME: "wallabagdb"
+      DATABASE_USER: "wallabaguser"
+      DATABASE_PASS: "wallabagpass"
+      DOMAIN_NAME: "http://wallabag_test"
+      REGISTRATION_CONFIRM: "false"
   - name: test image
     image: python:2.7.18-alpine
     commands:
